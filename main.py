@@ -142,8 +142,8 @@ def no_similar_movie(user_genre, user_plot):
 def check_user_movie(user_genre, user_plot):
     the_movie_id = search_similar_movies(user_genre, user_plot)
     if not the_movie_id:
-        response = no_similar_movie(user_genre, user_plot)
-        return(response)
+        #response = no_similar_movie(user_genre, user_plot)
+        return("Didn't check the files")
     the_movie = ia.get_movie(the_movie_id, ['reviews'])
     allreviews = the_movie['reviews'] 
   

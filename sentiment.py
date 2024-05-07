@@ -12,6 +12,7 @@ nltk.download('vader_lexicon')
 nltk.download('averaged_perceptron_tagger')
 nltk.download('punkt')
 nltk.download('stopwords')
+nltk.download('wordnet')
 
 # Initialize Sentiment Intensity Analyzer
 sia = SentimentIntensityAnalyzer()

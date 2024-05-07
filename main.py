@@ -12,7 +12,7 @@ import json
 
 load_dotenv()
 ia = Cinemagoer('http')
-input_file = '../top250_movies.json'
+input_file = './top250_movies.json'
 
 # Global variable to store cached data (initially empty)
 cached_data = {}

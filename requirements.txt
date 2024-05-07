@@ -1,4 +1,4 @@
-cinemagoer==2022.7.9
+cinemagoer @ git+https://github.com/cinemagoer/cinemagoer@193ec421a944b2b2e2ab2446d89307884fd3b5f8
 langchain==0.1.17
 langchain_openai==0.1.6
 nltk==3.8.1

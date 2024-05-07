@@ -8,10 +8,9 @@ from nltk.tokenize import word_tokenize
 import string
 
 # Download NLTK resources if not already downloaded
-#nltk.download('vader_lexicon')
-
-#nltk.download('averaged_perceptron_tagger')
-#nltk.download('punkt')
+nltk.download('vader_lexicon')
+nltk.download('averaged_perceptron_tagger')
+nltk.download('punkt')
 
 
 # Initialize Sentiment Intensity Analyzer

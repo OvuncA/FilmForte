@@ -82,53 +82,52 @@ def compare_plots(user_plot, plot):
     return similarity_score
 
 # Function to retrieve sentiment score for a movie premise
-def anaylze_movie(sentiments, topics):
-    movie_llm = OpenAI(temperature=0.7)
+def anaylze_movie(plot, sentiments, topics):
+    movie_llm = OpenAI(temperature=0.6)
 
     prompt_template_title = PromptTemplate(
-        input_variables = ['sentiments', 'topics'],
+        input_variables = ['plot', 'sentiments', 'topics'],
         template = """
-        You are a robust and creative Hollywood production algorithm specialized in analyzing movie plots to make accurate audience perception estimations.
+        As an advanced movie critic algorithm, your task is to analyze new movie plots along with sentiment scores and keywords extracted from reviews of existing movies with similar plots. 
+        By doing this, you can estimate the overall audience perception accurately.
+        Start by examining the {plot} (new movie plot) with keen attention to detail. Break down the storyline, character arcs, conflicts, and resolutions. 
+        Then, review sentiment scores: {sentiments} from reviews of existing movies with similar plots and identify the keywords that commonly appear in positive and negative reviews to understand audience reactions better from the keywords: {topics}.
         
-        You achieve this by analyzing sentiment scores and keywords from movie reviews.
-
-        Analyze the following data:
-
-        Sentiments: {sentiments} 
-        Keywords: {topics}
-
-        **Write a compelling and insightful movie analysis for a brand new movie idea based on the summary above, without directly mentioning the specific sentiments or topics.**
-        Use only first conditional mood tenses in your answer to describe.
-        Your review should be engaging, technical and informative, providing an unbiased overall opinion of the movie and its potential reception by the audience and should not exceed a paragraph. 
-
-        Focus on the movie itself and avoid mentioning that you were given any specific details about sentiments or keywords.
+        Next, correlate the sentiment scores and keywords from past movies with the new movie plot. Look for patterns that indicate audience preferences and dislikes. 
+        This analysis will help you gauge how the audience might perceive the new movie.
+        Keep in mind that the accuracy of your estimation relies on the thoroughness of your analysis. 
+        Pay close attention to nuances in the plot, sentiments expressed in reviews, and recurring keywords. By applying this methodology diligently, you can provide valuable insights into the potential reception of the new movie.
+        
+        For example, when analyzing a new sci-fi movie plot, consider sentiments and keywords from past successful sci-fi films. 
+        Look for keywords like "engaging," "futuristic," or "mind-bending" in positive reviews, and "predictable," "disjointed," or "underdeveloped" in negative reviews to draw informed conclusions about audience perception.
+        
+        Remember to focus on how the movie can be improved to appeal to a wider audience and receive positive feedback.
         """
     )
 
     movie_name_chain = LLMChain(llm = movie_llm, prompt = prompt_template_title, output_key = "movie_sentiment")
-    response = movie_name_chain.invoke({'sentiments' : sentiments, 'topics' : topics})
+    response = movie_name_chain.invoke({'plot' : plot, 'sentiments' : sentiments, 'topics' : topics})
 
     return response
 
 # The function that improvises if there are no similar movies in top 250
 def no_similar_movie(user_genre, user_plot):
-    movie_llm = OpenAI(temperature=0.7)
+    movie_llm = OpenAI(temperature=0.6)
 
     prompt_template_title = PromptTemplate(
         input_variables = ['user_genre', 'user_plot'],
         template = """
-        You are a robust and creative Hollywood production algorithm specialized in analyzing movie plots to make accurate audience perception estimations.
-        
-        You achieve this by analyzing genre and plot that's given to you.
+        As an advanced movie critic algorithm, your task is to analyze new movie plots with genres.
+        By doing this, you can estimate the overall audience perception accurately.
+        Start by examining the {user_plot} (new movie plot) that's in {user_genre} (genre) the with keen attention to detail. Break down the storyline, character arcs, conflicts, and resolutions. 
 
-        Analyze the following data:
+        Imagine you are analyzing a new movie plot and genre details. Considering the audience's preferences, give recommendations on how the film can be enhanced to cater better to their tastes. 
+        You should focus on aspects such as character development, plot twists, pacing, emotions, and overall engagement to provide constructive feedback for the movie creators to implement for a more successful outcome.
+        This analysis will help you gauge how the audience might perceive the new movie.
+        Keep in mind that the accuracy of your estimation relies on the thoroughness of your analysis. 
 
-        Genre: {user_genre} 
-        Plot: {user_plot}
-
-        **Write a compelling and insightful movie analysis for a brand new movie idea based on the summary above, without directly mentioning the specific sentiments or topics.**
-        Use only first conditional mood tenses in your answer to describe.
-        Your review should be engaging, technical and informative, providing an unbiased overall opinion of the movie and its potential reception by the audience and should not exceed a paragraph.
+        For instance, after evaluating a science fiction movie with a complex plot and lacking character depth, suggest enriching the main characters' backstories to create a stronger emotional connection with the viewers.
+        Remember to focus on how the movie can be improved to appeal to a wider audience and receive positive feedback.
         """
     )
 
@@ -142,8 +141,8 @@ def no_similar_movie(user_genre, user_plot):
 def check_user_movie(user_genre, user_plot):
     the_movie_id = search_similar_movies(user_genre, user_plot)
     if not the_movie_id:
-        #response = no_similar_movie(user_genre, user_plot)
-        return("Didn't check the files")
+        response = no_similar_movie(user_genre, user_plot)
+        return(response)
     the_movie = ia.get_movie(the_movie_id, ['reviews'])
     allreviews = the_movie['reviews'] 
   
@@ -156,5 +155,5 @@ def check_user_movie(user_genre, user_plot):
     sentiments = sta.analyze_sentiment(reviews)
     topics = sta.extract_topics(reviews)
 
-    response = anaylze_movie(sentiments, topics)
+    response = anaylze_movie(user_plot, sentiments, topics)
     return(response)

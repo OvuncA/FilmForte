@@ -1,7 +1,9 @@
 import main as ms
 import streamlit as st
 
-st.title("FilmForte")
+col1, col2, col3 = st.columns((1, 4, 1))
+with col2:
+    st.image("./image/logo.png")
 
 movie_form = st.sidebar.form('my_form')
 app_movie_genre = movie_form.selectbox("Select your Genre:", 

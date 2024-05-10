@@ -1,10 +1,17 @@
 import main as ms
 import streamlit as st
 
-col1, col2, col3 = st.columns((1, 4, 1))
+col1, col2, col3 = st.columns((1, 3, 1))
 with col2:
     st.image("./image/logo.png")
+st.markdown("**FilmForte** is your movie-loving friend with AI smarts who knows just how audiences will feel about your film ideas!")
 
+st.sidebar.markdown('''
+**Share the Story:** Tell us your film's genre and plot.
+
+**Insightful Analysis:** See how audiences are feeling with accurate data from IMDb's top 250 movies.
+
+**Make Smart Moves:** Armed with insights, make confident decisions about your film's journey. ''')
 movie_form = st.sidebar.form('my_form')
 app_movie_genre = movie_form.selectbox("Select your Genre:", 
                                        ("Action", "Adventure", "Animation",
